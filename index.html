@@ -25,7 +25,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; overflow: hidden; flex-direction: row; transition: background-color 0.5s ease; }
 
-        /* 🚀 로그인 & 회원가입 모달 (새로 추가됨) */
+        /* 🚀 로그인 & 회원가입 모달 */
         .auth-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; z-index: 9999; animation: fadeIn 0.5s; }
         .auth-box { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 24px; width: 400px; padding: 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px var(--primary-glow); transform: translateY(0); transition: all 0.3s; }
         .auth-header { text-align: center; margin-bottom: 30px; }
@@ -33,7 +33,7 @@
         .auth-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); }
         .auth-tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: var(--text-muted); font-weight: 600; transition: 0.3s; }
         .auth-tab.active { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); }
-        .auth-form-group { margin-bottom: 15px; }
+        .auth-form-group { margin-bottom: 15px; position: relative; }
         .auth-form-group input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 14px; border-radius: 12px; color: #fff; outline: none; transition: 0.3s; }
         .auth-form-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px var(--primary-glow); }
         .auth-btn { width: 100%; padding: 16px; margin-top: 10px; background: linear-gradient(135deg, var(--primary-color), #2563eb); border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px var(--primary-glow); }
@@ -48,7 +48,7 @@
         .ripple::after { content: ""; display: block; position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; background-image: radial-gradient(circle, #fff 10%, transparent 10.01%); background-repeat: no-repeat; background-position: 50%; transform: scale(10, 10); opacity: 0; transition: transform .5s, opacity 1s; }
         .ripple:active::after { transform: scale(0, 0); opacity: .3; transition: 0s; }
 
-        /* 사이드바 */
+        /* 사이드바 및 레이아웃 (기존 동일) */
         .sidebar { width: 280px; background-color: var(--sidebar-color); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 24px; z-index: 10; shrink: 0; transition: all 0.4s; }
         .logo { font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px; margin-bottom: 25px; background: linear-gradient(135deg, #3b82f6, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: logoGlow 3s infinite alternate; cursor: pointer; user-select: none; }
         @keyframes logoGlow { from { filter: drop-shadow(0 0 2px var(--primary-glow)); } to { filter: drop-shadow(0 0 12px var(--primary-color)); } }
@@ -69,7 +69,6 @@
         .status-dot { width: 10px; height: 10px; background-color: var(--success-color); border-radius: 50%; box-shadow: 0 0 12px var(--success-color); animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px transparent; } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 transparent; } }
 
-        /* 메인 레이아웃 */
         .main-content { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-gradient); overflow-y: auto; scroll-behavior: smooth; position: relative; animation: auraWave 10s infinite alternate; }
         @keyframes auraWave { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
         
@@ -89,7 +88,6 @@
         .stat-icon { width: 54px; height: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: rgba(59, 130, 246, 0.08); color: var(--primary-color); border: 1px solid rgba(59, 130, 246, 0.15); transition: all 0.3s; }
         .stat-card:hover .stat-icon { background: var(--primary-color); color: #fff; transform: rotate(8deg) scale(1.1); box-shadow: 0 0 15px var(--primary-color); }
         
-        /* 채팅창 */
         .chat-container { flex-grow: 1; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 24px; display: flex; flex-direction: column; height: 100%; min-height: 450px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .chat-messages { flex-grow: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; scroll-behavior: smooth; }
         .chat-messages::-webkit-scrollbar { width: 6px; }
@@ -102,7 +100,6 @@
         .chat-input-area input { flex-grow: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 18px; color: white; outline: none; transition: 0.3s; }
         .chat-input-area input:focus { border-color: var(--primary-color); box-shadow: 0 0 12px var(--primary-glow); }
 
-        /* 결제 박스 */
         .billing-box { background: linear-gradient(135deg, rgba(31, 41, 55, 0.7), rgba(17, 24, 39, 0.9)); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; margin-bottom: 25px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
         .plan-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-top: 20px; z-index: 2; }
         .plan-card { background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 15px; cursor: pointer; text-align: center; transition: all 0.3s; position: relative; }
@@ -115,18 +112,15 @@
         .pay-options { display: flex; gap: 12px; margin-top: 20px; z-index: 2; flex-wrap: wrap; }
         .pay-select { background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: #fff; padding: 14px; border-radius: 12px; font-size: 14px; outline: none; cursor: pointer; flex-grow: 1; min-width: 200px; }
         
-        /* 테이블 */
         .table-responsive { width: 100%; overflow-x: auto; border-radius: 16px; border: 1px solid var(--border-color); background: rgba(17, 24, 39, 0.4); }
         .billing-table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
         .billing-table th { padding: 16px; background: rgba(0,0,0,0.2); color: var(--text-muted); font-size: 13px; font-weight: 600; text-transform: uppercase; }
         .billing-table td { padding: 18px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #e5e7eb; }
         
-        /* 공통 버튼 */
         .btn { background: linear-gradient(135deg, var(--primary-color), #2563eb); color: white; border: none; border-radius: 12px; padding: 15px 24px; font-size: 15px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; box-shadow: 0 4px 12px var(--primary-glow); }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4); filter: brightness(1.1); }
         .btn.btn-success { background: linear-gradient(135deg, var(--success-color), #059669); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); flex-grow: 2; }
 
-        /* 이스터에그 효과 (파티클/떨림) */
         .easter-egg-active { animation: shake 0.5s ease-in-out; filter: hue-rotate(90deg); }
         @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 10% { transform: translate(-1px, -2px) rotate(-1deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 30% { transform: translate(3px, 2px) rotate(0deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 50% { transform: translate(-1px, 2px) rotate(-1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 70% { transform: translate(3px, 1px) rotate(-1deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 90% { transform: translate(1px, 2px) rotate(0deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
 
@@ -164,15 +158,21 @@
 
             <div id="form-register" class="hidden">
                 <div class="auth-form-group">
-                    <input type="text" placeholder="원하시는 닉네임 (가명 가능)">
+                    <input type="text" id="reg-nickname" placeholder="원하시는 닉네임 (가명 가능)">
+                    <p id="error-nick" style="color: var(--danger-color); font-size: 12px; margin-top: 5px; display: none;"></p>
+                </div>
+                <div class="auth-form-group" style="display: flex; gap: 10px;">
+                    <input type="email" id="reg-email" placeholder="복구용 이메일" style="flex: 1;">
+                    <button class="btn" style="padding: 10px 15px; font-size: 13px; white-space: nowrap;" onclick="requestAuthCode()">인증 발송</button>
+                </div>
+                <div class="auth-form-group hidden" id="auth-code-group">
+                    <input type="text" id="reg-auth-code" placeholder="인증번호 6자리 입력 (시뮬레이션: 123456)">
                 </div>
                 <div class="auth-form-group">
-                    <input type="email" placeholder="복구용 이메일">
+                    <input type="password" id="reg-password" placeholder="비밀번호 (영대소문자 포함 4자 이상)">
+                    <p id="error-pw" style="color: var(--danger-color); font-size: 12px; margin-top: 5px; display: none;"></p>
                 </div>
-                <div class="auth-form-group">
-                    <input type="password" placeholder="새로운 비밀번호">
-                </div>
-                <button class="auth-btn ripple" onclick="doLogin()">계정 승인 요청</button>
+                <button class="auth-btn ripple" onclick="doRegister()">계정 승인 요청</button>
             </div>
         </div>
     </div>
@@ -256,13 +256,11 @@
                         <div class="plan-price">₩49,000</div>
                     </div>
                 </div>
-
                 <div class="strict-warning">
                     <label class="agree-check">
                         <input type="checkbox" id="refund-agree"> (필수) 보안 디지털 라이선스는 발급 즉시 적용되며 환불이 불가함을 확인했습니다.
                     </label>
                 </div>
-
                 <div class="pay-options">
                     <select class="pay-select" id="pay-method-select">
                         <option value="card">💳 카드 결제 (보안 연결)</option>
@@ -299,46 +297,17 @@
     </div>
 
     <script>
-        // 🔒 보안: 너의 실제 API Key는 숨겨놨어! 나중에 여기에 다시 넣으면 돼.
         const GEMINI_API_KEY = "여기에_너의_진짜_API키를_넣으세요"; 
         const CORE_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent`;
-
         IMP.init("imp00000000m");
 
-        // 🎵 사운드 엔진 생성 (Web Audio API - 외부 파일 필요 없음)
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioContext();
+        // ------------------ 인증 및 회원가입 로직 ------------------
+        
+        // 데이터베이스 시뮬레이션 (이미 가입된 닉네임 리스트)
+        const mockDatabaseUsers = ["관리자", "admin", "WOS마스터"];
+        let sentAuthCode = "";
 
-        function playSound(type) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            if (type === 'click') {
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.1);
-            } else if (type === 'success') {
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(660, audioCtx.currentTime + 0.1);
-                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.2);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.5);
-            }
-        }
-
-        // 🔐 로그인 창 로직
         function toggleAuth(type) {
-            playSound('click');
             document.getElementById('tab-login').classList.remove('active');
             document.getElementById('tab-register').classList.remove('active');
             document.getElementById('form-login').classList.add('hidden');
@@ -346,27 +315,81 @@
             
             document.getElementById(`tab-${type}`).classList.add('active');
             document.getElementById(`form-${type}`).classList.remove('hidden');
+            
+            // 입력 폼 및 에러 초기화
+            document.querySelectorAll('input').forEach(input => input.value = '');
+            document.querySelectorAll('p[id^="error-"]').forEach(p => p.style.display = 'none');
+            document.getElementById("auth-code-group").classList.add("hidden");
         }
 
         function doLogin() {
-            playSound('success');
             const overlay = document.getElementById('auth-overlay');
             overlay.style.opacity = '0';
             setTimeout(() => { overlay.style.display = 'none'; }, 500);
         }
 
-        // 🥚 이스터에그 로직 (로고 5번 클릭)
+        // 프론트엔드 이메일 발송 시뮬레이션 (실제로는 백엔드에서 SMTP 연동 필요)
+        function requestAuthCode() {
+            const email = document.getElementById('reg-email').value.trim();
+            if(!email) {
+                alert("이메일을 먼저 입력해주세요.");
+                return;
+            }
+            
+            alert(`${email} (으)로 인증번호가 발송되었습니다.\n\n※ 현재는 서버가 없는 시뮬레이션 모드입니다. 테스트용 인증번호 '123456'을 입력하세요.`);
+            sentAuthCode = "123456"; 
+            document.getElementById('auth-code-group').classList.remove('hidden');
+        }
+
+        function doRegister() {
+            const nick = document.getElementById('reg-nickname').value.trim();
+            const authCode = document.getElementById('reg-auth-code').value.trim();
+            const pw = document.getElementById('reg-password').value;
+            
+            const errNick = document.getElementById('error-nick');
+            const errPw = document.getElementById('error-pw');
+            
+            errNick.style.display = 'none';
+            errPw.style.display = 'none';
+
+            // 1. 닉네임 중복 및 빈칸 검사
+            if(nick === "") {
+                errNick.innerText = "닉네임을 입력해주세요.";
+                errNick.style.display = 'block'; return;
+            }
+            if(mockDatabaseUsers.includes(nick)) {
+                errNick.innerText = "⚠️ 이미 사용 중인 닉네임입니다.";
+                errNick.style.display = 'block'; return;
+            }
+
+            // 2. 이메일 인증코드 검사
+            if(authCode !== sentAuthCode || authCode === "") {
+                alert("인증번호가 일치하지 않습니다. 다시 확인해주세요."); return;
+            }
+
+            // 3. 비밀번호 정규식 검사 (최소 4글자, 영문 대문자 1개 이상, 영문 소문자 1개 이상, 숫자/특수문자 제외)
+            const pwRegex = /^(?=.*[a-z])(?=.*[A-Z])[A-Za-z]{4,}$/;
+            if(!pwRegex.test(pw)) {
+                errPw.innerText = "⚠️ 비밀번호는 최소 4자 이상, 영문 대문자와 소문자를 각각 1개 이상 포함한 '영문'으로만 구성해야 합니다.";
+                errPw.style.display = 'block'; return;
+            }
+
+            alert(`환영합니다, ${nick}님! 회원가입이 성공적으로 완료되었습니다.`);
+            
+            // 로그인 화면으로 전환
+            toggleAuth('login');
+        }
+
+        // ------------------ 기타 UI 로직 ------------------
+
         let clickCount = 0;
         let lastClickTime = 0;
         function triggerEasterEgg() {
-            playSound('click');
             const now = Date.now();
-            if (now - lastClickTime > 1000) clickCount = 0; // 1초 지나면 리셋
+            if (now - lastClickTime > 1000) clickCount = 0;
             lastClickTime = now;
             clickCount++;
-
             if (clickCount === 5) {
-                playSound('success');
                 document.body.classList.add('easter-egg-active');
                 alert("🚨 [히든 모드 활성화] WOS 개발자 모드가 켜졌습니다!");
                 setTimeout(() => { document.body.classList.remove('easter-egg-active'); }, 2000);
@@ -374,19 +397,12 @@
             }
         }
 
-        // 플랜 관리 및 탭
-        let currentPlanName = 'v1.0 Basic';
-        let currentPlanPrice = 10000;
-
         function selectPlan(element, name, price) {
-            playSound('click');
             document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('active'));
             element.classList.add('active');
-            currentPlanName = name; currentPlanPrice = price;
         }
 
         function switchTab(tabId, element) {
-            playSound('click');
             const currentTab = document.querySelector('.tab-content.active');
             const targetTab = document.getElementById(tabId);
             if (currentTab) {
@@ -404,16 +420,13 @@
         }
 
         function changeTheme(themeName, element) {
-            playSound('click');
             document.body.className = ''; 
             if (themeName) document.body.classList.add(themeName);
             document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
         }
 
-        // AI 전송
         async function sendToGeminiFast() {
-            playSound('click');
             const inputEl = document.getElementById("user-input");
             const chatBox = document.getElementById("chat-box");
             const prompt = inputEl.value.trim();
@@ -426,10 +439,9 @@
             chatBox.innerHTML += `<div class="message bot" id="${loadingId}" style="color:var(--primary-color);"><i class="fa-solid fa-circle-notch fa-spin"></i> 암호화 통신망 연결 중...</div>`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // 만약 API 키를 안 넣었다면 에러가 아닌 안내 메시지를 띄움
             if(GEMINI_API_KEY === "여기에_너의_진짜_API키를_넣으세요") {
                 setTimeout(() => {
-                    document.getElementById(loadingId).innerText = "시스템 관리자님, 코드 259번째 줄에 진짜 API 키를 입력해 주세요!";
+                    document.getElementById(loadingId).innerText = "시스템 관리자님, 코드에 진짜 API 키를 입력해 주세요!";
                 }, 1000);
                 return;
             }
@@ -445,25 +457,19 @@
                 
                 if (resData.candidates) {
                     botMessageEl.innerText = resData.candidates[0].content.parts[0].text;
-                    playSound('success');
                 } else {
-                    // 오류 코드 없이 한국어로 부드럽게 표시
                     botMessageEl.innerHTML = "<span style='color:var(--danger-color);'>접근 지연: 잠시 후 다시 시도해주세요.</span>";
                 }
             } catch (error) {
-                // 시스템 에러 코드 방지
                 document.getElementById(loadingId).innerHTML = "<span style='color:var(--danger-color);'><i class='fa-solid fa-triangle-exclamation'></i> 통신 지연. 망 상태를 확인하세요.</span>";
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         function requestPay() {
-            playSound('click');
             const isAgreed = document.getElementById("refund-agree").checked;
             if (!isAgreed) { alert("⛔ 결제 정책 동의가 필요합니다."); return; }
-            
             alert("보안 결제 모듈이 호출되었습니다 (현재는 테스트 모드입니다).");
-            // 보안을 위해 buyer 정보도 일반화 처리함
         }
     </script>
 </body>
