@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WOS 기업 전용 종합 포털 v10.0 Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+    
+    <style>
+        /* 기본 테마 변수 정의 */
+        :root {
+            --bg-color: #0b0f19;
+            --sidebar-color: #111827;
+            --primary-color: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.3);
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --text-color: #f9fafb;
+            --text-muted: #9ca3af;
+            --glass-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --card-bg: #1f2937;
+            --bg-gradient: radial-gradient(circle at 80% 10%, rgba(59, 130, 246, 0.12), transparent 50%), radial-gradient(circle at 20% 90%, rgba(167, 139, 250, 0.08), transparent 50%);
+        }
+
+        /* 🎨 배경 커스텀 테마 클래스 */
+        body.theme-space {
+            --bg-color: #05050a; --sidebar-color: #0d0d15; --primary-color: #10b981; --primary-glow: rgba(16, 185, 129, 0.3); --glass-bg: rgba(13, 13, 21, 0.7); --card-bg: #161622;
+            --bg-gradient: radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15), transparent 70%), radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.08), transparent 50%);
+        }
+        body.theme-purple {
+            --bg-color: #0f0a1c; --sidebar-color: #160f29; --primary-color: #a78bfa; --primary-glow: rgba(167, 139, 250, 0.3); --glass-bg: rgba(22, 15, 41, 0.7); --card-bg: #24193d;
+            --bg-gradient: radial-gradient(circle at 30% 20%, rgba(167, 139, 250, 0.15), transparent 60%), radial-gradient(circle at 70% 80%, rgba(236, 72, 153, 0.1), transparent 60%);
+        }
+        body.theme-navy {
+            --bg-color: #0a192f; --sidebar-color: #0f2244; --primary-color: #00f2fe; --primary-glow: rgba(0, 242, 254, 0.3); --glass-bg: rgba(15, 34, 68, 0.7); --card-bg: #17325c;
+            --bg-gradient: radial-gradient(circle at 90% 30%, rgba(0, 242, 254, 0.12), transparent 50%), radial-gradient(circle at 10% 70%, rgba(79, 70, 229, 0.15), transparent 60%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; height: 100vh; overflow: hidden; flex-direction: row; transition: background-color 0.5s ease; }
+
+        /* 사이드바 */
+        .sidebar { width: 280px; background-color: var(--sidebar-color); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 24px; z-index: 10; shrink: 0; transition: all 0.4s; }
+        .logo { font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px; margin-bottom: 25px; background: linear-gradient(135deg, #3b82f6, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: logoGlow 3s infinite alternate; }
+        @keyframes logoGlow { from { filter: drop-shadow(0 0 2px var(--primary-glow)); } to { filter: drop-shadow(0 0 12px var(--primary-color)); } }
+        
+        .nav-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .nav-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; color: var(--text-muted); text-decoration: none; border-radius: 12px; font-size: 15px; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+        .nav-item:hover { color: #fff; background-color: rgba(255, 255, 255, 0.03); transform: translateX(4px); }
+        .nav-item.active { background: linear-gradient(90deg, rgba(59, 130, 246, 0.15), transparent); color: var(--primary-color); font-weight: 700; box-shadow: inset 4px 0 0 var(--primary-color); }
+        
+        .theme-selector-container { margin-top: auto; margin-bottom: 15px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 12px; border-radius: 14px; }
+        .theme-title { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .theme-buttons { display: flex; gap: 8px; justify-content: space-between; }
+        .theme-btn { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
+        .theme-btn:hover { transform: scale(1.15); }
+        .theme-btn.active { border-color: #fff; transform: scale(1.1); }
+        
+        .user-profile { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 12px; backdrop-filter: blur(8px); }
+        .status-dot { width: 10px; height: 10px; background-color: var(--success-color); border-radius: 50%; box-shadow: 0 0 12px var(--success-color); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px transparent; } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 transparent; } }
+
+        /* 메인 레이아웃 */
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; background: var(--bg-gradient); overflow-y: auto; scroll-behavior: smooth; position: relative; animation: auraWave 10s infinite alternate; }
+        @keyframes auraWave { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+        
+        .tab-content { flex-grow: 1; padding: 40px; display: none; opacity: 0; transform: translateY(20px) scale(0.98); transition: all 0.4s; }
+        .tab-content.active { display: flex; flex-direction: column; opacity: 1; transform: translateY(0) scale(1); }
+        
+        .header-area { margin-bottom: 30px; }
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px; }
+        .subtitle { color: var(--text-muted); font-size: 14px; }
+
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-bottom: 30px; }
+        .stat-card { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.4s; }
+        .stat-card:hover { transform: translateY(-6px); background: rgba(31, 41, 55, 0.8); border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 12px 30px rgba(0,0,0,0.3), 0 0 20px var(--primary-glow); }
+        .stat-info h3 { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
+        .stat-info p { font-size: 24px; font-weight: 700; background: linear-gradient(to right, #fff, #e5e7eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-icon { width: 54px; height: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: rgba(59, 130, 246, 0.08); color: var(--primary-color); border: 1px solid rgba(59, 130, 246, 0.15); transition: all 0.3s; }
+        .stat-card:hover .stat-icon { background: var(--primary-color); color: #fff; transform: rotate(8deg) scale(1.1); box-shadow: 0 0 15px var(--primary-color); }
+        
+        /* 채팅창 */
+        .chat-container { flex-grow: 1; background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 24px; display: flex; flex-direction: column; height: 100%; min-height: 450px; overflow: hidden; }
+        .chat-messages { flex-grow: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .message { max-width: 75%; padding: 14px 20px; border-radius: 18px; line-height: 1.6; font-size: 15px; animation: msgPop 0.4s forwards; }
+        @keyframes msgPop { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .message.bot { background: rgba(255, 255, 255, 0.04); align-self: flex-start; border-top-left-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
+        .message.user { background: linear-gradient(135deg, var(--primary-color), #1d4ed8); align-self: flex-end; border-top-right-radius: 4px; color: #fff; }
+        .chat-input-area { padding: 18px; border-top: 1px solid var(--border-color); display: flex; gap: 12px; background: rgba(17, 24, 39, 0.8); }
+        .chat-input-area input { flex-grow: 1; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 18px; color: white; outline: none; }
+        .chat-input-area input:focus { border-color: var(--primary-color); box-shadow: 0 0 12px var(--primary-glow); }
+
+        /* ------------------ 결제 전용 스타일 ------------------ */
+        .billing-box { background: linear-gradient(135deg, rgba(31, 41, 55, 0.7), rgba(17, 24, 39, 0.9)); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; margin-bottom: 25px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        .billing-box::after { content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px; background: var(--primary-glow); filter: blur(60px); border-radius: 50%; z-index: 1; pointer-events: none; }
+        .plan-badge { background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.2); color: var(--success-color); padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 12px; }
+        
+        /* 플랜 선택 카드 */
+        .plan-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-top: 20px; z-index: 2; }
+        .plan-card { background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 20px 15px; cursor: pointer; text-align: center; transition: all 0.3s; position: relative; }
+        .plan-card:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-3px); }
+        .plan-card.active { border-color: var(--primary-color); background: rgba(59, 130, 246, 0.15); box-shadow: 0 0 20px var(--primary-glow); transform: translateY(-5px); }
+        .plan-name { font-weight: 700; font-size: 18px; margin-bottom: 8px; color: #fff; letter-spacing: 0.5px; }
+        .plan-price { color: var(--primary-color); font-size: 20px; font-weight: 700; }
+        
+        /* 환불 불가 경고창 */
+        .strict-warning { z-index: 2; margin-top: 20px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 16px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px; }
+        .warning-text { color: #fca5a5; font-size: 13px; font-weight: 600; line-height: 1.5; }
+        .agree-check { display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fff; font-size: 14px; font-weight: 700; user-select: none; }
+        .agree-check input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--danger-color); }
+
+        /* 결제 옵션 (모든 은행) */
+        .pay-options { display: flex; gap: 12px; margin-top: 20px; z-index: 2; flex-wrap: wrap; }
+        .pay-select { background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); color: #fff; padding: 14px; border-radius: 12px; font-size: 14px; outline: none; cursor: pointer; flex-grow: 1; min-width: 200px; }
+        .pay-select:focus { border-color: var(--primary-color); }
+
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 16px; border: 1px solid var(--border-color); background: rgba(17, 24, 39, 0.4); }
+        .billing-table { width: 100%; border-collapse: collapse; text-align: left; min-width: 600px; }
+        .billing-table th { padding: 16px; background: rgba(0,0,0,0.2); color: var(--text-muted); font-size: 13px; font-weight: 600; text-transform: uppercase; }
+        .billing-table td { padding: 18px 16px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #e5e7eb; }
+        .billing-table tr:hover td { background: rgba(255,255,255,0.01); color: #fff; }
+
+        /* 고객센터 폼 */
+        .cs-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; }
+        .cs-form { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 18px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        .form-group input, .form-group textarea { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; color: #fff; outline: none; font-size: 14px; }
+        .form-group textarea { resize: none; height: 120px; }
+        .ticket-list { display: flex; flex-direction: column; gap: 16px; }
+        .ticket-item { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; position: relative; }
+        .ticket-status { position: absolute; top: 20px; right: 20px; font-size: 12px; padding: 4px 10px; border-radius: 6px; font-weight: 500; background: rgba(239, 68, 68, 0.12); color: var(--danger-color); }
+
+        /* 공통 버튼 */
+        .btn { background: linear-gradient(135deg, var(--primary-color), #2563eb); color: white; border: none; border-radius: 12px; padding: 15px 24px; font-size: 15px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s; box-shadow: 0 4px 12px var(--primary-glow); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4); filter: brightness(1.1); }
+        .btn.btn-success { background: linear-gradient(135deg, var(--success-color), #059669); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); flex-grow: 2; }
+        .btn.btn-success:hover { box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5); }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding: 16px; }
+            .logo { margin-bottom: 12px; justify-content: center; font-size: 20px; }
+            .menu-title, .theme-selector-container, .user-profile { display: none; }
+            .nav-links { flex-direction: row; justify-content: space-around; }
+            .nav-item { padding: 12px 8px; font-size: 13px; flex-direction: column; gap: 6px; flex: 1; text-align: center; justify-content: center; border-radius: 10px; }
+            .nav-item.active { box-shadow: inset 0 -3px 0 var(--primary-color); background: rgba(59,130,246,0.06); }
+            .main-content { height: calc(100vh - 115px); }
+            .tab-content { padding: 24px 16px; }
+            .cs-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo"><i class="fa-solid fa-bolt"></i> WOS PORTAL</div>
+        <ul class="nav-links">
+            <li class="nav-item active" onclick="switchTab('tab-dash', this)"><i class="fa-solid fa-chart-pie"></i>홈</li>
+            <li class="nav-item" onclick="switchTab('tab-ai', this)"><i class="fa-solid fa-robot"></i>AI 엔진</li>
+            <li class="nav-item" onclick="switchTab('tab-pay', this)"><i class="fa-solid fa-credit-card"></i>결제</li>
+            <li class="nav-item" onclick="switchTab('tab-cs', this)"><i class="fa-solid fa-headset"></i>고객센터</li>
+        </ul>
+
+        <div class="theme-selector-container">
+            <div class="theme-title"><i class="fa-solid fa-palette"></i> 테마 배경 커스텀</div>
+            <div class="theme-buttons">
+                <button class="theme-btn active" style="background: #0b0f19;" onclick="changeTheme('', this)" title="사이버 다크"></button>
+                <button class="theme-btn" style="background: #05050a; box-shadow: inset 0 0 5px #10b981;" onclick="changeTheme('theme-space', this)" title="네온 스페이스"></button>
+                <button class="theme-btn" style="background: #0f0a1c; box-shadow: inset 0 0 5px #a78bfa;" onclick="changeTheme('theme-purple', this)" title="럭셔리 퍼플"></button>
+                <button class="theme-btn" style="background: #0a192f; box-shadow: inset 0 0 5px #00f2fe;" onclick="changeTheme('theme-navy', this)" title="심해 네이비"></button>
+            </div>
+        </div>
+
+        <div class="user-profile">
+            <div class="status-dot"></div>
+            <div>
+                <div style="font-size: 14px; font-weight: 700; color: #fff;">jkg120님</div>
+                <div style="font-size: 12px; color: var(--text-muted);">최고경영자 (CEO)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div id="tab-dash" class="tab-content active">
+            <div class="header-area">
+                <h1>홈 대시보드</h1>
+                <div class="subtitle">인프라 가동 통계를 실시간으로 모니터링합니다.</div>
+            </div>
+            <div class="grid-container">
+                <div class="stat-card" onclick="switchTab('tab-ai', document.querySelectorAll('.nav-item')[1])">
+                    <div class="stat-info"><h3>AI 엔진 속도</h3><p>초고속 (0.2s)</p></div>
+                    <div class="stat-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                </div>
+                <div class="stat-card" onclick="switchTab('tab-pay', document.querySelectorAll('.nav-item')[2])">
+                    <div class="stat-info"><h3>현재 요금제</h3><p id="dash-plan-status">무료 평가판</p></div>
+                    <div class="stat-icon"><i class="fa-solid fa-gem"></i></div>
+                </div>
+                <div class="stat-card" onclick="switchTab('tab-cs', document.querySelectorAll('.nav-item')[3])">
+                    <div class="stat-info"><h3>접수된 문의</h3><p id="dash-cs-count">1 건</p></div>
+                    <div class="stat-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-ai" class="tab-content">
+            <div class="header-area">
+                <h1>초고속 AI 엔진</h1>
+                <div class="subtitle">모바일 제스처 및 마우스 반응형 인터랙션 최적화 완료.</div>
+            </div>
+            <div class="chat-container">
+                <div id="chat-box" class="chat-messages">
+                    <div class="message bot">안녕하세요, CEO님! 더욱 화려하고 부드러워진 모션 UI를 탑재했습니다. 무엇을 도와드릴까요?</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="user-input" placeholder="질문을 입력하세요... (Enter)" onkeypress="if(event.keyCode==13) sendToGeminiFast()">
+                    <button class="btn" onclick="sendToGeminiFast()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-pay" class="tab-content">
+            <div class="header-area">
+                <h1>결제 및 플랜 관리</h1>
+                <div class="subtitle">모든 은행 연동 완료. 구독 멤버십과 청구 명세서를 관리합니다.</div>
+            </div>
+            <div class="billing-box">
+                <div style="z-index: 2;">
+                    <span class="plan-badge" id="plan-badge-status"><i class="fa-solid fa-circle-check"></i> 요금제 선택</span>
+                    <h2 style="font-size: 20px; margin-bottom: 6px; color:#fff;">WOS 포탈 정액제 업그레이드</h2>
+                    <p style="color: var(--text-muted); font-size: 13px;">원하시는 기능 버전과 결제 수단을 선택해 주세요.</p>
+                </div>
+
+                <div class="plan-selector">
+                    <div class="plan-card active" onclick="selectPlan(this, 'v1.0 Basic', 10000)">
+                        <div class="plan-name">v1.0 Basic</div>
+                        <div class="plan-price">₩10,000</div>
+                    </div>
+                    <div class="plan-card" onclick="selectPlan(this, 'v2.0 Plus', 20000)">
+                        <div class="plan-name">v2.0 Plus</div>
+                        <div class="plan-price">₩20,000</div>
+                    </div>
+                    <div class="plan-card" onclick="selectPlan(this, 'v3.0 Ultra', 30000)">
+                        <div class="plan-name">v3.0 Ultra</div>
+                        <div class="plan-price">₩30,000</div>
+                    </div>
+                    <div class="plan-card" onclick="selectPlan(this, 'v3.0 Pro', 49000)">
+                        <div class="plan-name">v3.0 Pro</div>
+                        <div class="plan-price">₩49,000</div>
+                    </div>
+                </div>
+
+                <div class="strict-warning">
+                    <div class="warning-text">
+                        <i class="fa-solid fa-triangle-exclamation"></i> [경고] 디지털 상품의 특성상 결제 및 API 키 발급이 완료된 후에는 <b>어떠한 사유로도 절대 환불이 불가</b>합니다. 신중하게 결제해 주시기 바랍니다.
+                    </div>
+                    <label class="agree-check">
+                        <input type="checkbox" id="refund-agree"> (필수) 위 환불 불가 정책을 확인하였으며 이에 동의합니다.
+                    </label>
+                </div>
+
+                <div class="pay-options">
+                    <select class="pay-select" id="pay-method-select">
+                        <option value="card">💳 신용/체크카드 (전 카드사 지원)</option>
+                        <option value="trans">🏦 실시간 계좌이체 (모든 은행 연동)</option>
+                        <option value="vbank">💵 가상계좌 무통장 입금</option>
+                    </select>
+                    <button class="btn btn-success" onclick="requestPay()"><i class="fa-solid fa-wallet"></i> 선택한 플랜 확정 및 결제하기</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="billing-table">
+                    <thead>
+                        <tr>
+                            <th>결제일시</th>
+                            <th>플랜명</th>
+                            <th>결제수단</th>
+                            <th>금액</th>
+                            <th>상태</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billing-history-body">
+                        <tr>
+                            <td>2026-06-01</td>
+                            <td>무료 평가판 시작</td>
+                            <td>-</td>
+                            <td>₩0</td>
+                            <td style="color: var(--success-color); font-weight: 700;"><i class="fa-solid fa-circle-check"></i> 사용중</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-cs" class="tab-content">
+            <div class="header-area">
+                <h1>고객지원 센터</h1>
+                <div class="subtitle">오류 제보 및 서비스 피드백을 신속하게 접수합니다.</div>
+            </div>
+            <div class="cs-layout">
+                <div class="cs-form">
+                    <div class="form-group">
+                        <label>문의 유형</label>
+                        <input type="text" id="cs-type" value="시스템 인프라 확장 및 개선 제안">
+                    </div>
+                    <div class="form-group">
+                        <label>상세 내용</label>
+                        <textarea id="cs-msg" placeholder="개선이 필요한 세부 내용을 입력하세요..."></textarea>
+                    </div>
+                    <button class="btn" onclick="submitTicket()">문의 등록하기</button>
+                </div>
+                <div>
+                    <div class="ticket-list" id="ticket-container">
+                        <div class="ticket-item">
+                            <span class="ticket-status status-wait">답변 대기</span>
+                            <h4 style="font-size: 14px; margin-bottom: 6px; color:#fff;">404 엔드포인트 터널 보수 요청 건</h4>
+                            <p style="color: var(--text-muted); font-size: 12px; line-height: 1.5;">v1beta 경로 미매칭 현상 2.5 고속 엔진 전환 처리 건.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GEMINI_API_KEY = "AQ.Ab8RN6J13ilikd79PPasBoST9-3EkBwsp6PxihtUoftDE31XTQ";
+        const CORE_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent`;
+
+        // 💳 PortOne 공용 테스트 가맹점 식별 코드 (오류 없는 버전)
+        IMP.init("imp00000000m");
+
+        // 플랜 선택 로직
+        let currentPlanName = 'v1.0 Basic';
+        let currentPlanPrice = 10000;
+
+        function selectPlan(element, name, price) {
+            document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+            currentPlanName = name;
+            currentPlanPrice = price;
+        }
+
+        // 💳 모든 은행/카드 지원 결제 로직
+        function requestPay() {
+            // 1. 환불 불가 정책 동의 체크
+            const isAgreed = document.getElementById("refund-agree").checked;
+            if (!isAgreed) {
+                alert("⛔ 결제를 진행하려면 '환불 불가 정책'에 반드시 동의하셔야 합니다.");
+                return;
+            }
+
+            // 2. 선택한 결제 수단 가져오기 (card, trans, vbank)
+            const selectedMethod = document.getElementById("pay-method-select").value;
+
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const merchantUid = `merchant_${yyyy}${mm}${dd}_${Date.now()}`;
+
+            // 3. 결제창 호출 (html5_inicis를 통해 모든 은행 계좌이체 및 카드 지원)
+            IMP.request_pay({
+                pg: "html5_inicis", // 모든 은행 및 결제수단 지원 PG
+                pay_method: selectedMethod, // 유저가 선택한 수단(카드, 계좌이체, 가상계좌)
+                merchant_uid: merchantUid,
+                name: `WOS 포탈 ${currentPlanName} 정액제`,
+                amount: currentPlanPrice,
+                buyer_email: "jkg120@wos-enterprise.com",
+                buyer_name: "jkg120",
+                buyer_tel: "010-1234-5678"
+            }, function (rsp) {
+                if (rsp.success) {
+                    alert(`🎉 결제가 정상적으로 완료되었습니다!\n결제 플랜: ${currentPlanName}\n결제 금액: ₩${currentPlanPrice.toLocaleString()}`);
+                    
+                    // UI 상태값 업데이트
+                    document.getElementById("dash-plan-status").innerText = currentPlanName + " 활성화됨";
+                    document.getElementById("plan-badge-status").innerHTML = `<i class="fa-solid fa-crown"></i> ${currentPlanName} Active`;
+                    
+                    // 결제 내역 테이블 추가
+                    const historyBody = document.getElementById("billing-history-body");
+                    let methodText = selectedMethod === 'card' ? '신용/체크카드' : selectedMethod === 'trans' ? '실시간 계좌이체' : '가상계좌 입금';
+                    
+                    const newRow = document.createElement("tr");
+                    newRow.innerHTML = `
+                        <td>${yyyy}-${mm}-${dd}</td>
+                        <td style="color:var(--primary-color); font-weight:bold;">${currentPlanName}</td>
+                        <td>${methodText}</td>
+                        <td>₩${currentPlanPrice.toLocaleString()}</td>
+                        <td style="color: var(--success-color); font-weight: 700;"><i class="fa-solid fa-circle-check"></i> 결제완료 (환불불가)</td>
+                    `;
+                    historyBody.insertBefore(newRow, historyBody.firstChild);
+                    
+                    // 체크박스 초기화
+                    document.getElementById("refund-agree").checked = false;
+                } else {
+                    alert(`❌ 결제에 실패하였습니다. 사유: ${rsp.error_msg}`);
+                }
+            });
+        }
+
+        // 테마 및 탭 전환 기능
+        function changeTheme(themeName, element) {
+            document.body.className = ''; 
+            if (themeName) document.body.classList.add(themeName);
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function switchTab(tabId, element) {
+            const currentTab = document.querySelector('.tab-content.active');
+            const targetTab = document.getElementById(tabId);
+            
+            if (currentTab) {
+                currentTab.style.opacity = '0';
+                currentTab.style.transform = 'translateY(15px) scale(0.98)';
+                setTimeout(() => {
+                    currentTab.classList.remove('active');
+                    launchTarget();
+                }, 200);
+            } else {
+                launchTarget();
+            }
+
+            function launchTarget() {
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+                targetTab.classList.add('active');
+                targetTab.offsetHeight; 
+                targetTab.style.opacity = '1';
+                targetTab.style.transform = 'translateY(0) scale(1)';
+            }
+        }
+
+        async function sendToGeminiFast() {
+            const inputEl = document.getElementById("user-input");
+            const chatBox = document.getElementById("chat-box");
+            const prompt = inputEl.value.trim();
+            if (!prompt) return;
+
+            chatBox.innerHTML += `<div class="message user">${prompt}</div>`;
+            inputEl.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            const loadingId = "load-" + Date.now();
+            chatBox.innerHTML += `
+                <div class="message bot" id="${loadingId}" style="color:var(--primary-color);">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> 인공지능이 코어 인프라 분석 중...
+                </div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                const response = await fetch(`${CORE_URL}?key=${GEMINI_API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                const resData = await response.json();
+                
+                const botMessageEl = document.getElementById(loadingId);
+                botMessageEl.style.color = ""; 
+                
+                if (resData.candidates && resData.candidates[0].content.parts[0].text) {
+                    botMessageEl.innerText = resData.candidates[0].content.parts[0].text;
+                } else {
+                    const backupUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent`;
+                    const bkRes = await fetch(`${backupUrl}?key=${GEMINI_API_KEY}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    });
+                    const bkData = await bkRes.json();
+                    botMessageEl.innerText = bkData.candidates[0].content.parts[0].text;
+                }
+            } catch (error) {
+                document.getElementById(loadingId).innerHTML = "<span style='color:var(--danger-color);'><i class='fa-solid fa-triangle-exclamation'></i> 엔드포인트 연결 실패. 망 상태를 확인하세요.</span>";
+            }
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function submitTicket() {
+            const type = document.getElementById("cs-type").value;
+            const msg = document.getElementById("cs-msg").value.trim();
+            if (!msg) return;
+
+            const container = document.getElementById("ticket-container");
+            const newItem = document.createElement("div");
+            newItem.className = "ticket-item";
+            newItem.innerHTML = `
+                <span class="ticket-status" style="background: rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.2); color: var(--success-color);">접수 완료</span>
+                <h4 style="font-size: 14px; margin-bottom: 6px; color:#fff;">${type}</h4>
+                <p style="color: var(--text-muted); font-size: 12px; line-height: 1.5;">${msg}</p>
+            `;
+            container.insertBefore(newItem, container.firstChild);
+            document.getElementById("cs-msg").value = "";
+            document.getElementById("dash-cs-count").innerText = "2 건";
+            alert("🚀 실시간 모니터링 보드에 티켓이 안전하게 등록되었습니다!");
+        }
+    </script>
+</body>
+</html>
